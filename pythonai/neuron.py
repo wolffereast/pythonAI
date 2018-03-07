@@ -7,12 +7,18 @@ Created on March 03, 2018
 from random import randrange
 from math import fabs
 from decimal import *
+import logging
 
 class Neuron():
     def __init__(self, numInputs=0, inputWeights=[], activationFunction=None):
+        # Set the basic logger config.
+        logging.basicConfig()
+        
         if 1 > numInputs:
-            print 'Invalid number of inputs. Number of inputs must be a positive integer.'
+            logger = logging.getLogger(__name__)
+            logger.error('Invalid number of inputs. Number of inputs must be a positive integer.')
             return None
+        
         self.numInputs = numInputs
         if 'step' == activationFunction:
             self.activationFunction = self.stepHandler
@@ -29,7 +35,8 @@ class Neuron():
         
     def getWeight(self, inputNum=0):
         if 0 > inputNum or inputNum >= self.numInputs:
-            print 'Cannot get the weight of the non existent input num: %i' % inputNum
+            logger = logging.getLogger(__name__)
+            logger.error('Cannot get the weight of the non existent input num: {0}'.format(inputNum))
             return False
         
         return self.inputWeights[inputNum]
@@ -42,14 +49,16 @@ class Neuron():
     
     def setWeight(self, inputNum, weight):
         if 0 > inputNum or inputNum >= self.numInputs:
-            print 'Cannot set the weight of the non existent input num: %i' % inputNum
+            logger = logging.getLogger(__name__)
+            logger.error('Cannot set the weight of the non existent input num: {0}'.format(inputNum))
             return False
         
         self.inputWeights[inputNum] = weight
         
     def randomizeWeights(self, minimum=-50, maximum=50):
         if minimum >= maximum:
-            print 'The minimum weight must be less than the maximum weight. {0} !< {1}'.format(minimum, maximum)
+            logger = logging.getLogger(__name__)
+            logger.error('The minimum weight must be less than the maximum weight. {0} !< {1}'.format(minimum, maximum))
             return False
         
         self.inputWeights = [randrange(minimum, maximum) for _ in range(self.numInputs)]
@@ -61,7 +70,8 @@ class Neuron():
     def signHandler(self, inputs=[], delta=0):
         # Ensure the number of inputs is equal to the number of weights
         if len(inputs) != self.numInputs:
-            print 'The number of inputs must equal the number of weights'
+            logger = logging.getLogger(__name__)
+            logger.error('The number of inputs must equal the number of weights')
             return False 
         
         total = 0
@@ -73,7 +83,8 @@ class Neuron():
     def stepHandler(self, inputs=[], delta=0):
         # Ensure the number of inputs is equal to the number of weights
         if len(inputs) != self.numInputs:
-            print 'The number of inputs must equal the number of weights'
+            logger = logging.getLogger(__name__)
+            logger.error('The number of inputs must equal the number of weights')
             return False 
         
         total = 0

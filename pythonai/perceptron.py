@@ -5,10 +5,14 @@ Created on March 03, 2018
 '''
 
 import neuron
+import logging
 
 class Perceptron():
     # alpha is the learning rate. Delta is the threshold.
     def __init__(self, alpha=1, delta=20):
+        # Set the basic logger config.
+        logging.basicConfig()
+        
         self.alpha = alpha
         self.delta = delta
         # create a neuron that takes 2 inputs, has random starting weights from
@@ -17,7 +21,8 @@ class Perceptron():
         
     def activate(self, inputs):
         if len(inputs) != 2:
-            print 'There must be 2 inputs to activate the perceptron.'
+            logger = logging.getLogger(__name__)
+            logger.error('There must be 2 inputs to activate the perceptron.')
             return False
         
         return self.neuron.activationFunction(inputs, self.delta)
@@ -35,10 +40,12 @@ class Perceptron():
             # Catch the type error, this will verify that the row is iterable. 
             try:
                 if len(trainingValue[0]) != 2:
-                    print 'Invalid number of inputs in the training value {0}'.format(trainingValue)
+                    logger = logging.getLogger(__name__)
+                    logger.error('Invalid number of inputs in the training value {0}'.format(trainingValue))
                     return False
             except TypeError: # catch when for loop fails
-                print 'invalid training value: the first element in the array must have a length of 2. Offending row: {0}'.format(trainingValue)
+                logger = logging.getLogger(__name__)
+                logger.error('invalid training value: the first element in the array must have a length of 2. Offending row: {0}'.format(trainingValue))
                 return False
         return self.trainHelper(trainingValues, maxIterations, 0)
         

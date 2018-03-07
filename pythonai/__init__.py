@@ -35,6 +35,6 @@ andTestItem = [andTestInnerItem]
 andTestItem.append(1)
 andTest.append(andTestItem)
 
-perceptron1 = perceptron.Perceptron()
+perceptron1 = perceptron.Perceptron(2)
 retVal = perceptron1.train(andTest)
 print retVal
