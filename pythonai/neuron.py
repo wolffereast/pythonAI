@@ -55,6 +55,19 @@ class Neuron():
         
         self.inputWeights[inputNum] = weight
         
+    def setWeights(self, weights):
+        try:
+            if len(weights) != self.numInputs:
+                logger = logging.getLogger(__name__)
+                logger.error('Invalid number of weights passed to setWeights: {0}. Expected {1}'.format(len(weights), self.numInputs))
+                return False
+        except TypeError: # catch when for loop fails
+            logger = logging.getLogger(__name__)
+            logger.error('Invalid weights passed to setWeights. Expected an array, received {0}'.format(weights))
+            return False
+        
+        self.inputWeights = weights
+        
     def randomizeWeights(self, minimum=-50, maximum=50):
         if minimum >= maximum:
             logger = logging.getLogger(__name__)
