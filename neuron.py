@@ -6,6 +6,7 @@ Created on March 03, 2018
 
 from random import random
 from math import fabs
+from decimal import *
 
 class Neuron():
     def __init__(self, numInputs=0, inputWeights=[], activationFunction=None):
@@ -13,8 +14,8 @@ class Neuron():
             print 'Invalid number of inputs. Number of inputs must be a positive integer.'
             return None
         self.numInputs = numInputs
-        if callable(activationFunction):
-            self.activationFunction = activationFunction
+        if 'step' == activationFunction:
+            self.activationFunction = self.stepHandler
         else:
             self.activationFunction = self.signHandler
         
@@ -46,7 +47,7 @@ class Neuron():
         
         self.inputWeights[inputNum] = weight
         
-    def randomizeWeights(self, minimum=-.5, maximum=.5):
+    def randomizeWeights(self, minimum=-.5, maximum=.5, sigFigs=1):
         if minimum >= maximum:
             print 'The minimum weight must be less than the maximum weight. {0} !< {1}'.format(minimum, maximum)
             return False
@@ -54,7 +55,7 @@ class Neuron():
         rangeNum = maximum - minimum
         absMinimum = fabs(minimum)
         
-        self.inputWeights = [(random() * rangeNum - absMinimum) for _ in range(self.numInputs)]
+        self.inputWeights = [(round(random(),sigFigs) * rangeNum - absMinimum) for _ in range(self.numInputs)]
     
     '''
     Default activation function for a neuron. Used if no activation function
@@ -71,3 +72,16 @@ class Neuron():
             total += self.inputWeights[i] * inputs[i]
         
         return 1 if total - delta >= 0 else -1
+    
+    # The Perceptron requires a step activation function.
+    def stepHandler(self, inputs=[], delta=0):
+        # Ensure the number of inputs is equal to the number of weights
+        if len(inputs) != self.numInputs:
+            print 'The number of inputs must equal the number of weights'
+            return False 
+        
+        total = 0
+        for i in range(0, self.numInputs):
+            total += self.inputWeights[i] * inputs[i]
+        
+        return 1 if total - delta >= 0 else 0
