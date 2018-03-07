@@ -4,7 +4,7 @@ Created on March 03, 2018
 @author: Stephen Wolff
 '''
 
-from random import random
+from random import randrange
 from math import fabs
 from decimal import *
 
@@ -47,15 +47,12 @@ class Neuron():
         
         self.inputWeights[inputNum] = weight
         
-    def randomizeWeights(self, minimum=-.5, maximum=.5, sigFigs=1):
+    def randomizeWeights(self, minimum=-50, maximum=50):
         if minimum >= maximum:
             print 'The minimum weight must be less than the maximum weight. {0} !< {1}'.format(minimum, maximum)
             return False
         
-        rangeNum = maximum - minimum
-        absMinimum = fabs(minimum)
-        
-        self.inputWeights = [(round(random(),sigFigs) * rangeNum - absMinimum) for _ in range(self.numInputs)]
+        self.inputWeights = [randrange(minimum, maximum) for _ in range(self.numInputs)]
     
     '''
     Default activation function for a neuron. Used if no activation function
@@ -73,7 +70,6 @@ class Neuron():
         
         return 1 if total - delta >= 0 else -1
     
-    # The Perceptron requires a step activation function.
     def stepHandler(self, inputs=[], delta=0):
         # Ensure the number of inputs is equal to the number of weights
         if len(inputs) != self.numInputs:

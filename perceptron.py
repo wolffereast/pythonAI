@@ -8,7 +8,7 @@ import neuron
 
 class Perceptron():
     # alpha is the learning rate. Delta is the threshold.
-    def __init__(self, alpha=.1, delta=.2):
+    def __init__(self, alpha=1, delta=20):
         self.alpha = alpha
         self.delta = delta
         # create a neuron that takes 2 inputs, has random starting weights from
@@ -55,7 +55,7 @@ class Perceptron():
             # Update the weights if necessary.
             if output != trainingValue[1]:
                 failed = True
-                print 'failed with output: {0}'.format(output)
+                print 'iteration {0} failed with output {1}'.format(iteration, output)
                 print 'training inputs: {0}'.format(trainingValue)
                 print 'weights: {0}'.format(self.neuron.getWeights())
                 self.updateWeights(trainingValue[0], trainingValue[1] - output)
