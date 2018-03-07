@@ -1,9 +1,13 @@
+'''
+Created on March 07, 2018
+
+@author: Stephen Wolff
+'''
+
 import unittest
 import neuron
 
 from mock import patch
-
-
 
 class TestNeuron(unittest.TestCase):
     # The patch call sets the mock to an instance of the supplied class.
