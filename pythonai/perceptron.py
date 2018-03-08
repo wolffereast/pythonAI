@@ -52,6 +52,9 @@ class Perceptron():
     # Validation has already occurred in the train function.
     def trainHelper(self, trainingValues, maxIterations, iteration):
         if iteration == maxIterations:
+            logger = logging.getLogger(__name__)
+            logger.info('failed after {0} iterations'.format(iteration))
+            
             retVal = self.getTrainingOutputs(trainingValues)
             retVal.append('failed after {0} iterations'.format(iteration))
             return retVal
@@ -72,6 +75,9 @@ class Perceptron():
         if failed:
             return self.trainHelper(trainingValues, maxIterations, iteration + 1)
         
+        logger = logging.getLogger(__name__)
+        logger.info('succeeded after {0} iterations'.format(iteration))
+        
         retVal = self.getTrainingOutputs(trainingValues)
         retVal.append('succeeded after {0} iterations'.format(iteration))
         return retVal
@@ -79,6 +85,9 @@ class Perceptron():
     def updateWeights(self, inputs, error):
         for i in range(0, len(inputs)):
             self.neuron.setWeight(i, self.neuron.getWeight(i) + (self.alpha * inputs[i] * error))
+            
+    def getWeights(self):
+        return self.neuron.getWeights()
     
     def getTrainingOutputs(self, trainingValues):
         retVal = []
