@@ -21,9 +21,9 @@ class Neuron():
         
         self.numInputs = numInputs
         if 'step' == activationFunction:
-            self.activationFunction = self.stepHandler
+            self.activate = self.stepHandler
         else:
-            self.activationFunction = self.signHandler
+            self.activate = self.signHandler
         
         if numInputs == len(inputWeights):
             self.inputWeights = inputWeights

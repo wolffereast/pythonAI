@@ -7,7 +7,7 @@ print neuron1.getWeight(0)
 print neuron1.getWeight(1)
 
 args = [1] * 2
-print neuron1.activationFunction(args)
+print neuron1.activate(args)
 print '...'
 print '...'
 

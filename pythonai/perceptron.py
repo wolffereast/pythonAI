@@ -25,7 +25,7 @@ class Perceptron():
             logger.error('There must be 2 inputs to activate the perceptron.')
             return False
         
-        return self.neuron.activationFunction(inputs, self.delta)
+        return self.neuron.activate(inputs, self.delta)
     
     '''
     training values is a multidimensional array with the first index being a
