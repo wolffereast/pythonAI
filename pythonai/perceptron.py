@@ -9,10 +9,10 @@ import logging
 
 class Perceptron():
     # alpha is the learning rate. Delta is the threshold.
-    def __init__(self, alpha=1, delta=20):
+    def __init__(self, alpha=.1, delta=.2):
         # Set the basic logger config.
         logging.basicConfig()
-        
+
         self.alpha = alpha
         self.delta = delta
         # create a neuron that takes 2 inputs, has random starting weights from

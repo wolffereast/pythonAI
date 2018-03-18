@@ -4,7 +4,7 @@ Created on March 03, 2018
 @author: Stephen Wolff
 '''
 
-from random import randrange
+from random import randrange, uniform
 from math import fabs, exp
 from decimal import *
 import logging
@@ -32,9 +32,7 @@ class Neuron():
             return
         
         self.randomizeWeights()
-            
-        
-        
+
     def getWeight(self, inputNum=0):
         if 0 > inputNum or inputNum >= self.numInputs:
             logger = logging.getLogger(__name__)
@@ -42,10 +40,10 @@ class Neuron():
             return False
         
         return self.inputWeights[inputNum]
-    
+
     def getWeights(self):
         return self.inputWeights
-    
+
     def getNumInputs(self):
         return self.numInputs
     
@@ -56,7 +54,7 @@ class Neuron():
             return False
         
         self.inputWeights[inputNum] = weight
-        
+
     def setWeights(self, weights):
         try:
             if len(weights) != self.numInputs:
@@ -70,13 +68,13 @@ class Neuron():
         
         self.inputWeights = weights
         
-    def randomizeWeights(self, minimum=-50, maximum=50):
+    def randomizeWeights(self, minimum=-.5, maximum=.5):
         if minimum >= maximum:
             logger = logging.getLogger(__name__)
             logger.error('The minimum weight must be less than the maximum weight. {0} !< {1}'.format(minimum, maximum))
             return False
         
-        self.inputWeights = [randrange(minimum, maximum) for _ in range(self.numInputs)]
+        self.inputWeights = [uniform(minimum, maximum) for _ in range(self.numInputs)]
     
     # Handler error handling and shared functionality.
     def handlerHelper(self, inputs=[], delta=0):
@@ -112,6 +110,6 @@ class Neuron():
         total = self.handlerHelper(inputs, delta)
         if (False == total):
             return False
-        return 1 / (1 + math.exp(-1 * total))
+        return 1 / (1 + exp(-1 * total))
         
         

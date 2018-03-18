@@ -37,7 +37,7 @@ class TestPerceptron(unittest.TestCase):
         andTestItem.append(1)
         andTest.append(andTestItem)
         
-        perceptron1 = perceptron.Perceptron(2)
+        perceptron1 = perceptron.Perceptron(.1, .2)
         perceptron1.train(andTest)
         
         self.assertNotEqual(None, mock.call_args)
@@ -71,7 +71,7 @@ class TestPerceptron(unittest.TestCase):
         andTestItem.append(1)
         andTest.append(andTestItem)
         
-        perceptron1 = perceptron.Perceptron(2)
+        perceptron1 = perceptron.Perceptron(.1, .2)
         perceptron1.train(andTest)
         
         self.assertNotEqual(None, mock.call_args)
