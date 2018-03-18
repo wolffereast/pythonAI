@@ -5,7 +5,7 @@ Created on March 03, 2018
 '''
 
 from random import randrange
-from math import fabs
+from math import fabs, exp
 from decimal import *
 import logging
 
@@ -22,6 +22,8 @@ class Neuron():
         self.numInputs = numInputs
         if 'step' == activationFunction:
             self.activate = self.stepHandler
+        elif 'sigmoid' == activationFunction:
+            self.activate = self.sigmoidHandler
         else:
             self.activate = self.signHandler
         
@@ -76,32 +78,40 @@ class Neuron():
         
         self.inputWeights = [randrange(minimum, maximum) for _ in range(self.numInputs)]
     
+    # Handler error handling and shared functionality.
+    def handlerHelper(self, inputs=[], delta=0):
+        # Ensure the number of inputs is equal to the number of weights
+        if len(inputs) != self.numInputs:
+            logger = logging.getLogger(__name__)
+            logger.error('The number of inputs must equal the number of weights')
+            return False 
+        
+        total = 0
+        for i in range(0, self.numInputs):
+            total += self.inputWeights[i] * inputs[i]
+            
+        return total
+    
     '''
     Default activation function for a neuron. Used if no activation function
     is passed during initialization.
     '''    
     def signHandler(self, inputs=[], delta=0):
-        # Ensure the number of inputs is equal to the number of weights
-        if len(inputs) != self.numInputs:
-            logger = logging.getLogger(__name__)
-            logger.error('The number of inputs must equal the number of weights')
-            return False 
-        
-        total = 0
-        for i in range(0, self.numInputs):
-            total += self.inputWeights[i] * inputs[i]
-        
+        total = self.handlerHelper(inputs, delta)
+        if (False == total):
+            return False
         return 1 if total - delta >= 0 else -1
     
     def stepHandler(self, inputs=[], delta=0):
-        # Ensure the number of inputs is equal to the number of weights
-        if len(inputs) != self.numInputs:
-            logger = logging.getLogger(__name__)
-            logger.error('The number of inputs must equal the number of weights')
-            return False 
-        
-        total = 0
-        for i in range(0, self.numInputs):
-            total += self.inputWeights[i] * inputs[i]
-        
+        total = self.handlerHelper(inputs, delta)
+        if (False == total):
+            return False
         return 1 if total - delta >= 0 else 0
+    
+    def sigmoidHandler(self, inputs=[], delta=0):
+        total = self.handlerHelper(inputs, delta)
+        if (False == total):
+            return False
+        return 1 / (1 + math.exp(-1 * total))
+        
+        
