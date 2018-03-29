@@ -10,7 +10,16 @@ from decimal import *
 import logging
 
 class Neuron():
-    def __init__(self, numInputs=0, inputWeights=[], activationFunction=None):
+    '''
+    The input weights each weight one of the inputs. Those inputs are aggregated
+    then run through the activationFunction. The results of the
+    activationFunction are then optionally weighted by the returnWeight and
+    returnWeightModifier.
+    The returnWeightModifier defaults to 0, which negates the returnWeight.
+    Setting both the return weight and return weight modifier to a non zero
+    number will alter the output of the activated neuron.
+    '''
+    def __init__(self, numInputs=0, inputWeights=[], activationFunction=None, returnWeight=0, returnWeightModifier=0):
         # Set the basic logger config.
         logging.basicConfig()
         
@@ -26,6 +35,9 @@ class Neuron():
             self.activate = self.sigmoidHandler
         else:
             self.activate = self.signHandler
+            
+        self.returnWeight = returnWeight
+        self.returnWeightModifier = returnWeightModifier
         
         if numInputs == len(inputWeights):
             self.inputWeights = inputWeights
@@ -47,6 +59,9 @@ class Neuron():
     def getNumInputs(self):
         return self.numInputs
     
+    def getReturnWeight(self):
+        return self.returnWeight
+    
     def setWeight(self, inputNum, weight):
         if 0 > inputNum or inputNum >= self.numInputs:
             logger = logging.getLogger(__name__)
@@ -67,6 +82,9 @@ class Neuron():
             return False
         
         self.inputWeights = weights
+        
+    def setReturnWeight(self, weight):
+        self.returnWeight = weight
         
     def randomizeWeights(self, minimum=-.5, maximum=.5):
         if minimum >= maximum:
@@ -98,18 +116,21 @@ class Neuron():
         total = self.handlerHelper(inputs, delta)
         if (False == total):
             return False
-        return 1 if total - delta >= 0 else -1
+        retVal = 1 if total - delta >= 0 else -1
+        return retVal + (self.returnWeight * self.returnWeightModifier)
     
     def stepHandler(self, inputs=[], delta=0):
         total = self.handlerHelper(inputs, delta)
         if (False == total):
             return False
-        return 1 if total - delta >= 0 else 0
+        retVal = 1 if total - delta >= 0 else 0
+        return retVal + (self.returnWeight * self.returnWeightModifier)
     
     def sigmoidHandler(self, inputs=[], delta=0):
         total = self.handlerHelper(inputs, delta)
         if (False == total):
             return False
-        return 1 / (1 + exp(-1 * total))
+        retVal = 1 / (1 + exp(-1 * total))
+        return retVal + (self.returnWeight * self.returnWeightModifier)
         
         
